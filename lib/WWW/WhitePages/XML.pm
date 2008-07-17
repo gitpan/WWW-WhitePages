@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0717 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0718 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -142,7 +142,7 @@ sub WWW::WhitePages::XML::demo
    my $control =
    {
       'level' => 0,
-      'xml' = [ $result->content() ],
+      'xml' => [ $result->content() ],
       'order_out' => [],
       'columns_out' => [],
    };
@@ -370,7 +370,7 @@ my $result = WWW::WhitePages::XML::API::ua_request( $request );
 my $control =
 {
    'level' => 0,
-   'xml' = [ $result->content() ],
+   'xml' => [ $result->content() ],
    'order_out' => [],
    'columns_out' => [],
 };

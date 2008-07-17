@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%04d", "Revision: 2008.0717" =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%04d", "Revision: 2008.0718" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -665,7 +665,7 @@ B<Firstname>: First name (like Eric R)
 
 B<House>: House number
 
-B<Street>: Street (without House number)
+B<Street>: Street name (without House number)
 
 B<City>: City name
 
