@@ -1,0 +1,40 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.54.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 8aa0a5c891f39f24b21d3fa99dcc2d26a63264f1 Build.PL
+SHA1 0b184ad51ba2a79e85d2288d5fcf8a1ea0481ea4 COPYING
+SHA1 72371f3217c31e8c92331c90cc2153a04f3b07bf INSTALL
+SHA1 df862041f95ec29c3a1816f3e4a4590572a2a20e MANIFEST
+SHA1 73c5f9ec06885dea39c108097f5d338c238d3707 MANIFEST.SKIP
+SHA1 8359ddc9bfa056c32af4f14876787f8ea39855c4 META.yml
+SHA1 cd14ada78fb37a0d926edd86eddcdf7f939de582 Makefile.PL
+SHA1 67ad0b789f4fd60472a1f1abba36e7a741b29c73 README
+SHA1 42e0ecc9591626c95bbc9ec0729ab21abfe255c7 lib/WWW/WhitePages.pm
+SHA1 fc48abe865f8f5d04cd6af5f262129579c462b88 lib/WWW/WhitePages/ML/API.pm
+SHA1 9d059c77aacba6a4b04f2199228931b07be614bf lib/WWW/WhitePages/XML.pm
+SHA1 6f88866bef326328e6b8df86c18302ee0f1a12cb lib/WWW/WhitePages/XML/API.pm
+SHA1 a4022d8ff7ce7dc4c72fbae65f3a77fad289260d public_keys/ERMEYERS2008.pub
+SHA1 1c3c78eda4e369301ba0ccc82e53e14055e9ccb6 t/test0.pl.t
+SHA1 d0038759b73f4b86e2e19092eda9ac465e7fe748 t/use_me/test0.pl.t
+SHA1 756aa33c3a6411256ac0e079e44d8dbf0e6558bc whitepages/demo/demo.plx
+SHA1 45f95d33abd5db89d68db902ede4230caa5e4c5e whitepages/wp_app/wp_app.tar.gz
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (GNU/Linux)
+
+iEYEARECAAYFAkh/T6AACgkQmYhyuYPOgKOPMQCeO5cR0QxGDNpN5OV9ZSscB8ck
+UBAAn0M8Ok0G1asIezSIPen5ML/5fVXt
+=qMq1
+-----END PGP SIGNATURE-----
