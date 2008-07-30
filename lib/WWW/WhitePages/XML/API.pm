@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0718 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0730 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -152,14 +152,14 @@ if ( -e $WWW::WhitePages::XML::API::config_file &&
      ( ( ( stat( $WWW::WhitePages::XML::API::config_file ) )[2] & 36 ) != 0 )
    )
 {
-   die "Your config file $WWW::WhitePages::XML::API::config_file is readable by others!\n";
+   die( "Your config file $WWW::WhitePages::XML::API::config_file is readable by others!\n" );
 
 } ## end if
 
 if ( -f $WWW::WhitePages::XML::API::config_file )
 {
    $WWW::WhitePages::XML::API::config->file( $WWW::WhitePages::XML::API::config_file )
-   || die "reading $WWW::WhitePages::XML::API::config_file\n";
+   || die( "reading $WWW::WhitePages::XML::API::config_file\n" );
 
 } ## end if
 

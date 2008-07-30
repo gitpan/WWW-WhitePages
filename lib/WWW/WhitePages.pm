@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%04d", "Revision: 2008.0718" =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%04d", "Revision: 2008.0730" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -509,6 +509,8 @@ sub WWW::WhitePages::03_reports
 
             } ## end for
 
+            $control->{'reported'} = 0;
+
             foreach my $x ( @{$control->{'columns_out'}} )
             {
                if ( $control->{'columns_in'}->[$map_in{'NeedAddress'}] )
@@ -518,7 +520,13 @@ sub WWW::WhitePages::03_reports
                }
                else
                {
-                  push( @output, $x ) if ( $x->[0] ne '' ); ## with phone numbers only
+                  if ( $x->[0] ne '' ) ## with phone numbers only
+                  {
+                     push( @output, $x );
+
+                     $control->{'reported'} = 1;
+
+                  } ## end if
 
                } ## end if
 
@@ -547,8 +555,6 @@ sub WWW::WhitePages::03_reports
                print $fh_out "\n";
 
                $fh_out->close();
-
-               $control->{'reported'} = 1;
 
             } ## end if
 
@@ -593,6 +599,25 @@ sub WWW::WhitePages::04_tallier
 
 } ## end sub WWW::WhitePages::04_tallier
 
+##
+## 99 Cleanup
+##
+sub WWW::WhitePages::99_cleanup
+{
+   chdir $FindBin::Bin;
+
+   chdir 'data';
+
+   my @input = <*.xml.gz>;
+
+   foreach my $control_file ( @input )
+   {
+      unlink $control_file;
+
+   } ## end foreach
+
+} ## end sub WWW::WhitePages::99_cleanup
+
 1;
 __END__ ## package WWW::WhitePages
 
@@ -617,6 +642,10 @@ WWW::WhitePages::01_getthem(); ## run daily
 WWW::WhitePages::02_process(); ## run as needed
 
 WWW::WhitePages::03_reports(); ## run as needed
+
+WWW::WhitePages::04_tallier(); ## run as needed
+
+WWW::WhitePages::99_cleanup(); ## run once, when done
 
 =head1 OPTIONS
 
@@ -677,7 +706,7 @@ B<NeedAddress>: 0/1 boolean flag
 
 =item WWW::WhitePages::01_getthem();
 
-This procedure performs the 1500 "find_person" searches per day. It uses the data as provided in wp.csv.gz to perform the initial query.
+This procedure performs the 1500 "find_person" searches per day. It uses the data as provided in wp.csv.gz to perform the initial query.  A second "metro" query is performed upon failure of the initial query.
 
 =item WWW::WhitePages::02_process();
 
@@ -688,6 +717,14 @@ This procedure processes the XML into CSV.
 This procedure generates the outputed group files.  If you don't need addresses, only records returned with phone numbers will be output.  The group files can be printed in landscape mode, using Open-office Calc or Writer.  Control logic is employed to report only once on a returned record.
 
 The fields output are qw(Type Lastname Firstname House Street City State Zip Phone), where Type can be blank, 'home' or 'work' for the Phone number.
+
+=item WWW::WhitePages::04_tallier();
+
+This procedure gives you a tally or count.
+
+=item WWW::WhitePages::99_cleanup();
+
+This procedure cleans the control files out the data directory.
 
 =back
 
