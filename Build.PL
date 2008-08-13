@@ -16,7 +16,7 @@ my $param =
    'NAME' => 'WWW-WhitePages',
    'CPANID' => 'ERMEYERS',
    'AUTHOR' => 'Eric R. Meyers <Eric.R.Meyers@gmail.com>',
-   'VERSION' => '2008.0730',
+   'VERSION' => '2008.0813',
    'LICENSE' => 'perl',
    'ABSTRACT' => 'Interface to www.whitepages.com',
 

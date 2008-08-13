@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0730 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0813 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -227,6 +227,8 @@ sub WWW::WhitePages::XML::parse_find_person_to_csv
 
       foreach my $wp_listing ( $xml_tree->find_by_tag_name( 'wp:listing' ) )
       {
+         my $index = $#{$control->{'columns_out'}} + 1;
+
          foreach my $wp_person ( $wp_listing->find_by_tag_name( 'wp:person' ) )
          {
             for ( my $i = 0; $i <= $#{$control->{'order_out'}}; $i++ )
@@ -264,7 +266,7 @@ sub WWW::WhitePages::XML::parse_find_person_to_csv
 
          foreach my $wp_phone ( $wp_listing->find_by_tag_name( 'wp:phone' ) )
          {
-            for( my $i = 0; $i <= $#{$control->{'columns_out'}}; $i++ )
+            for( my $i = $index; $i <= $#{$control->{'columns_out'}}; $i++ )
             {
                my $wp_fullphone = $wp_phone->find_by_tag_name( 'wp:fullphone' );
 
@@ -280,7 +282,7 @@ sub WWW::WhitePages::XML::parse_find_person_to_csv
 
          foreach my $wp_address ( $wp_listing->find_by_tag_name( 'wp:address' ) )
          {
-            for( my $i = 0; $i <= $#{$control->{'columns_out'}}; $i++ )
+            for( my $i = $index; $i <= $#{$control->{'columns_out'}}; $i++ )
             {
                my $wp_house = $wp_address->find_by_tag_name( 'wp:house' );
 

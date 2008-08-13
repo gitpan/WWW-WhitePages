@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%04d", "Revision: 2008.0730" =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%04d", "Revision: 2008.0813" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -169,7 +169,7 @@ sub WWW::WhitePages::crs2wp
 
    my @columns_out = undef;
 
-   my %seen = ();
+   my $seen = {};
 
    while( my $line_in = <$fh_in> )
    {
@@ -216,9 +216,9 @@ sub WWW::WhitePages::crs2wp
 
          } ## end for
 
-         next if ( defined( $seen{$columns_in[$map_in{'[DB_NO]'}]} ) );
+         next if ( defined( $seen->{$columns_in[$map_in{'[DB_NO]'}]} ) );
 
-         $seen{$columns_in[$map_in{'[DB_NO]'}]} = 1;
+         $seen->{$columns_in[$map_in{'[DB_NO]'}]} = $columns_in[$map_in{'[ACT_CLNT_ACT_NO]'}];
 
          $columns_out[$map_out{'Group'}] = $columns_in[$map_in{'[CC]'}];
 
@@ -277,6 +277,8 @@ sub WWW::WhitePages::crs2wp
    $fh_in->close();
 
    $fh_out->close();
+
+   XML::Dumper::pl2xml( $seen, "crs2crs.xml.gz" );
 
 } ## end sub WWW::WhitePages::crs2wp
 
@@ -526,6 +528,11 @@ sub WWW::WhitePages::03_reports
 
                      $control->{'reported'} = 1;
 
+                  }
+                  elsif ( $control->{'level'} == 1 )
+                  {
+                     push( @output, $x );
+
                   } ## end if
 
                } ## end if
@@ -544,11 +551,21 @@ sub WWW::WhitePages::03_reports
 
                print $fh_out $csv_out->string() . "\n";
 
+               my $seen = {};
+
                foreach my $x ( @output )
                {
                   $status_out = $csv_out->combine( @{$x} );
 
-                  print $fh_out $csv_out->string() . "\n";
+                  my $string = $csv_out->string();
+
+                  if ( ! defined( $seen->{$string} ) )
+                  {
+                     print $fh_out $string . "\n";
+
+                     $seen->{$string} = 1;
+
+                  } ## end if
 
                } ## end foreach
 
@@ -600,6 +617,180 @@ sub WWW::WhitePages::04_tallier
 } ## end sub WWW::WhitePages::04_tallier
 
 ##
+## WWW::WhitePages::wp2crs
+##
+sub WWW::WhitePages::wp2crs
+{
+   chdir $FindBin::Bin;
+
+   chdir 'data';
+
+   #my $seen = XML::Dumper::xml2pl( 'wp.xml.gz' );
+
+   my $date_today = Date::Format::time2str( "%Y%m%d", time() );
+
+   my $w_filename = File::Spec->catfile( '..', 'output', 'common_dnl.dat.gz' ); ## wacho demographic
+
+   unlink( $w_filename ) if ( -f $w_filename );
+
+   my $w_fh = IO::Zlib->new( $w_filename, 'wb9' );
+
+   my $w_seq = 1;
+
+   my @w_order =
+   (
+      'transDate', #= 8;
+      'transTime', #= 4;
+      'accountNumber', #= 20;
+      'transCode', #= 2;
+      'sequenceNumber', #= 2;
+      'notUsed1', #= 4;
+      'comment', #= 40;
+      'intExtFLAG', #= 1;
+      'recoverCode', #= 4;
+      'recoverID', #= 8;
+      'notUsed2', #= 2;
+      'mIOPARENT', #= 4;
+      'notUsed3', #= 1;
+      'eol' #= 1
+
+   );
+
+   my $w_pkfmt = 'A8A4A20A2A2A4A40A1A4A8A2A4A1A1';
+
+   my %w_map = ();
+
+   for ( my $i = 0; $i <= $#w_order; $i++ )
+   {
+      $w_map{$w_order[$i]} = $i;
+
+   } ## end for
+
+   my @w_data = ();
+
+   foreach ( @w_order )
+   {
+      push( @w_data, '' );
+
+   } ## end foreach
+
+   $w_data[$w_map{'transDate'}] = $date_today;
+
+   $w_data[$w_map{'accountNumber'}] = '4227093881918480';
+
+   $w_data[$w_map{'transCode'}] = '90';
+
+   $w_data[$w_map{'sequenceNumber'}] = sprintf( "%02d", $w_seq++ % 100 );
+
+   $w_data[$w_map{'comment'}] = '###################';
+
+   $w_data[$w_map{'eol'}] = "\n";
+
+   ##debug## print $w_fh pack( $w_pkfmt, @w_data );
+
+   my $n_filename = File::Spec->catfile( '..', 'output', 'ncofwdease.dat.gz' ); ## nco fwdease
+
+   unlink( $n_filename ) if ( -f $n_filename );
+
+   my $n_fh = IO::Zlib->new( $n_filename, 'wb9' );
+
+   my @n_order =
+   (
+      'recordCode', #= 2;
+      'fileNo', #= 10;
+      'accountID', #= 20;
+      'mascoFile', #= 15;
+      'firmID', #= 10;
+      'forwID', #= 10;
+      'pDate', #= 8;
+      'pCode', #= 8;
+      'pCmt', #= 30;
+      'eol', #= 1;
+
+   );
+
+   my $n_pkfmt = 'A2A10A20A15A10A10A8A8A30A1';
+
+   my %n_map = ();
+
+   for ( my $i = 0; $i <= $#n_order; $i++ )
+   {
+      $n_map{$n_order[$i]} = $i;
+
+   } ## end for
+
+   my @n_data = ();
+
+   foreach ( @n_order )
+   {
+      push( @n_data, '' );
+
+   } ## end foreach
+
+   $n_data[$n_map{'recordCode'}] = '09';
+
+   $n_data[$n_map{'accountID'}] = '4227093881918480';
+
+   $n_data[$n_map{'pDate'}] = $date_today;
+
+   $n_data[$n_map{'pCode'}] = '*XX:X114';
+
+   $n_data[$n_map{'pCmt'}] = 'WHITEPAGE INFO';
+
+   $n_data[$n_map{'eol'}] = "\n";
+
+   ##debug## print $n_fh pack( $n_pkfmt, @n_data );
+
+   ##
+   ## Rattle on
+   ##
+
+   my @input = <*.xml.gz>;
+
+   foreach my $control_file ( @input )
+   {
+      my $control = XML::Dumper::xml2pl( $control_file );
+
+      my $w_s = 1;
+
+      my $w_n = 1;
+
+      $control_file =~ m/^(\w+)[.]xml[.]gz$/;
+
+      $w_data[$w_map{'accountNumber'}] = $1;
+
+      $w_data[$w_map{'sequenceNumber'}] = sprintf( "%02d", $w_s++ % 100 );
+
+      $w_data[$w_map{'comment'}] = '###################';
+
+      print $w_fh pack( $w_pkfmt, @w_data );
+
+      $w_data[$w_map{'sequenceNumber'}] = sprintf( "%02d", $w_s++ % 100 );
+
+      $w_data[$w_map{'comment'}] = '# WHITEPAGES LISTING: ' . $w_n;
+
+      print $w_fh pack( $w_pkfmt, @w_data );
+
+      $w_data[$w_map{'sequenceNumber'}] = sprintf( "%02d", $w_s++ % 100 );
+
+      $w_data[$w_map{'comment'}] = '###################';
+
+      print $w_fh pack( $w_pkfmt, @w_data );
+
+      ##debug## print $n_fh pack( $n_pkfmt, @n_data );
+
+   } ## end foreach
+
+   ##
+   ## Finish
+   ##
+   $w_fh->close();
+
+   $n_fh->close();
+
+} ## end sub WWW::WhitePages::wp2crs
+
+##
 ## 99 Cleanup
 ##
 sub WWW::WhitePages::99_cleanup
@@ -612,7 +803,7 @@ sub WWW::WhitePages::99_cleanup
 
    foreach my $control_file ( @input )
    {
-      unlink $control_file;
+      unlink( $control_file );
 
    } ## end foreach
 

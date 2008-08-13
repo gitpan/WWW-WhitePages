@@ -1,6 +1,6 @@
 ---
 name: WWW-WhitePages
-version: 2008.0730
+version: 2008.0813
 author:
   - 'Eric R. Meyers <Eric.R.Meyers@gmail.com>'
 abstract: Interface to www.whitepages.com
@@ -21,16 +21,16 @@ recommends:
 provides:
   WWW::WhitePages:
     file: lib/WWW/WhitePages.pm
-    version: 2008.0730
+    version: 2008.0813
   WWW::WhitePages::ML::API:
     file: lib/WWW/WhitePages/ML/API.pm
-    version: 2008.0730
+    version: 2008.0813
   WWW::WhitePages::XML:
     file: lib/WWW/WhitePages/XML.pm
-    version: 2008.0730
+    version: 2008.0813
   WWW::WhitePages::XML::API:
     file: lib/WWW/WhitePages/XML/API.pm
-    version: 2008.0730
+    version: 2008.0813
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
