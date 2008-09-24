@@ -16,7 +16,7 @@ my $param =
    'NAME' => 'WWW-WhitePages',
    'CPANID' => 'ERMEYERS',
    'AUTHOR' => 'Eric R. Meyers <Eric.R.Meyers@gmail.com>',
-   'VERSION' => '2008.0813',
+   'VERSION' => '2008.0924',
    'LICENSE' => 'perl',
    'ABSTRACT' => 'Interface to www.whitepages.com',
 
@@ -68,15 +68,14 @@ if ( -d "./_bin" ) ## won't exist in distribution
    $build->dispatch( 'test', 'verbose' => 1 );
    $build->dispatch( 'install' );
 
-   ##debug##
-   gpg_me();
+   ##debug## gpg_me();
 
 }
 else
 {
-   print "##\n## Thanks to Audrey Tang, for being the first person to send me an encryption.\n##\n";
+   #print "##\n## Thanks to Audrey Tang, for being the first person to send me an encryption.\n##\n";
 
-   gpg_me();
+   #gpg_me();
 
    print "Now, please enter 'Build' to make all, 'Build test' to test, and 'Build install' to install.\n";
 
